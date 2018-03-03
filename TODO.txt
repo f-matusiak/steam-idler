@@ -1,0 +1,2 @@
+1. Wszyscy uzytkownicy aktualnie i w jakich sa grach
+2. po zalogowaniu pokazuje sie twoj panel i tam mozesz wybrac gre
