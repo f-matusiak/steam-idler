@@ -6,7 +6,7 @@ const SteamUser = require('steam-user');
 // ---
 
 router.get('/', (req, res) => {
-  res.render('login');
+  res.render('login', { title: "Login" });
 });
 
 router.post('/', (req, res, next) => {

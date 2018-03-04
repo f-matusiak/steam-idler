@@ -1,8 +1,10 @@
 const express = require('express');
-const router = express.Router;
+const router = express.Router();
 const User = require('../models/user');
-router.get('/', (req, res) => {
-  res.render('register');
+
+
+router.get('/', (req, res, next) => {
+  res.render('register', { title: 'Register' });
 });
 
 router.post('/', (req, res, next) => {
@@ -25,3 +27,5 @@ router.post('/', (req, res, next) => {
     });
   }
 })
+
+module.exports = router;
