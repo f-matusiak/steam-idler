@@ -27,20 +27,21 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'app/public')));
 
 
-// Routes
+// Routes without authentication
 
 const routes = require('./app/routes/index');
-const games = require('./app/routes/games');
 const login = require('./app/routes/login');
 //const logout = require('./app/routes/logout');
 const register = require('./app/routes/register');
 
 app.use('/', routes);
-app.use('/games', games);
 app.use('/login', login);
 app.use('/register', register);
-//app.use('/logout', logout);
-//app.use('/profile', profile);
+
+// Routes after middleware authentication
+app.use(mid.requiresLogin);
+const profile = require('./app/routes/profile');
+app.use('/profile', profile);
 
 /// catch 404 and forwarding to error handler
 app.use(function (req, res, next) {

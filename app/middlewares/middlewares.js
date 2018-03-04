@@ -1,11 +1,18 @@
 module.exports = {
   requiresLogin: (req, res, next) => {
-    if (req.session && req.session.username) {
-      return next();
+    const token = req.body.token || req.params.token || req.headers['x-access-token'];
+
+    if (token) {
+      jwt.verify(token, 'superSecret', (err, decoded) => {
+        if (err) {
+          return next(new Error('Failed to authenticate token!'));
+        } else {
+          req.decoded = decoded;
+          next();
+        }
+      })
     } else {
-      const err = new Error('You have to be logged to enter this page!');
-      err.status = 401;
-      return next(err);
+      return next(new Error('You have to provide a token!'));
     }
   }
 };

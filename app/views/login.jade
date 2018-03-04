@@ -2,6 +2,7 @@ extends form
 
 block forminput
   form(action="/login", method="post")
-    input(type="text", name="username" placeholder="User Name or email..." required="")
+    input(type="email", name="email" placeholder="Email..." required="")
     input.padding(type="password", name="password" placeholder="Password" required="")
+    input.padding(type="text", name="token")
     input(type="submit", value="submit")
