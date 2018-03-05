@@ -1,8 +1,11 @@
 extends form
 
+block head
+  script(src="/javascripts/jquery-3.3.1.min.js")
+  script(src="/javascripts/login.js")
+
 block forminput
-  form(action="/login", method="post")
-    input(type="email", name="email" placeholder="Email..." required="")
-    input.padding(type="password", name="password" placeholder="Password" required="")
-    input.padding(type="text", name="token")
-    input(type="submit", value="submit")
+  form(action="")
+    input#email(type="email", name="email" placeholder="Email..." required="")
+    input.padding#password(type="password", name="password" placeholder="Password" required="")
+    input#submit(type="submit", value="submit")

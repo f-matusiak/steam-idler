@@ -1,6 +1,8 @@
+const jwt = require('jsonwebtoken');
+
 module.exports = {
   requiresLogin: (req, res, next) => {
-    const token = req.body.token || req.params.token || req.headers['x-access-token'];
+    const token = req.body.token || req.cookies.token;
 
     if (token) {
       jwt.verify(token, 'superSecret', (err, decoded) => {

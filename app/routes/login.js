@@ -24,7 +24,7 @@ router.post('/', (req, res, next) => {
       res.render('login', { error: "User dont exist!" });
     } else if (user) {
       if (user.passwordConfirm !== req.body.password) {
-        res.render('login', { title: 'Login', error: 'Wrong password!' });
+        res.json({ error: 'Wrong password!' });
       } else {
         const payload = {
           username: user.username
@@ -32,11 +32,7 @@ router.post('/', (req, res, next) => {
         const token = jwt.sign(payload, 'superSecret', {
           expiresIn: 86400
         });
-        if (req.body.token) {
-          res.render('profile');
-        } else {
-          res.render('login', { error: token });
-        }
+        res.json({ token: token });
 
       }
     }
