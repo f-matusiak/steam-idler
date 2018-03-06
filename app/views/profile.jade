@@ -3,3 +3,14 @@ extends layout
 block content
   h1= text
   h2= token
+  .padding-all
+    .header
+      h2 Hello #{user}
+      h2= password
+      h4= token
+    .design-w3l
+      .mail-form-agile
+        form
+          input(type="text", name="steamID64")
+          br
+          input(type="submit", value="Save")
