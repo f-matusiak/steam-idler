@@ -17,25 +17,21 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  const query = { email: req.body.email };
-  User.findOne(query, (err, user) => {
+  User.authenticate(req.body.email, req.body.password, (err, user) => {
     if (err) return next(err);
-    if (!user) {
+    if (err === null && !user) {
       res.render('login', { error: "User dont exist!" });
-    } else if (user) {
-      if (user.passwordConfirm !== req.body.password) {
-        res.json({ error: 'Wrong password!' });
-      } else {
-        const payload = {
-          username: user.username
-        }
-        const token = jwt.sign(payload, 'superSecret', {
-          expiresIn: 86400
-        });
-        res.json({ token: token });
-
+    } else {
+      const payload = {
+        username: user.username
       }
+      const token = jwt.sign(payload, 'superSecret', {
+        expiresIn: 86400
+      });
+      res.json({ token: token });
+
     }
+
   })
   // res.render('helo', { login: req.body.email, password: req.body.password });
 })

@@ -14,8 +14,7 @@ router.post('/', (req, res, next) => {
     const userData = {
       email: req.body.email,
       username: req.body.username,
-      password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm
+      password: req.body.password
     };
 
     User.create(userData, (err, user) => {

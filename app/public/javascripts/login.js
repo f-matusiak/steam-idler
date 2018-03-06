@@ -5,15 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    const payload = {
+    const data = {
       email: email,
       password: password
     }
-    console.log(payload);
-    const data = new FormData();
-    data.append('json', JSON.stringify(payload));
 
-    $.post('/login', payload, (res) => {
+    $.post('/login', data, (res) => {
       if (res && res.error) {
         // display error
         console.log('Wrong password!');

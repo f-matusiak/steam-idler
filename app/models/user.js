@@ -18,15 +18,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  passwordConfirm: {
-    type: String,
-    required: true
-  },
   steamLogin: String,
   steamPassword: String,
   confirmation: Number,
-  steamId: String,
+  steamID64: {
+    type: String,
+    unique: true
+  },
   profileName: String,
+  imageUrl: String,
   apps: [{ appId: Number, name: String }]
 });
 
