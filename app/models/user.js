@@ -45,9 +45,9 @@ UserSchema.statics.authenticate = (email, password, callback) => {
       if (err) {
         return callback(err);
       } else if (!user) {
-        const err = new Error('User not found.');
-        err.status = 401;
-        return callback(err);
+        const error = new Error('User not found.');
+        error.status = 401;
+        return callback(error);
       }
       bcrypt.compare(password, user.password, (err, result) => {
         if (result === true) {
@@ -57,6 +57,56 @@ UserSchema.statics.authenticate = (email, password, callback) => {
         }
       });
     });
+};
+
+UserSchema.statics.updateSteamID = (id, steamID64, callback) => {
+  User.findByIdAndUpdate(id, { "steamID64": steamID64 }, (err, user) => {
+    if (err) {
+      return callback(err);
+    } else if (!user) {
+      const eror = new Error('User not found.');
+      error.status = 401;
+      return callback(error);
+    }
+    return callback(null, user);
+  })
+};
+
+UserSchema.statics.getPublic = (id, callback) => {
+  User.findById(id, (err, user) => {
+    if (err) {
+      return callback(err);
+    } else if (!user) {
+      const error = new Error('User not found!');
+      error.status = 401;
+      return callback(error);
+    }
+    const data = {
+      username: user.username,
+      apps: user.apps,
+      imageUrl: user.imageUrl
+    };
+    return callback(null, data);
+  })
+};
+
+UserSchema.statics.getPrivate = (id, callback) => {
+  User.findById(id, (err, user) => {
+    if (err) {
+      return callback(err);
+    } else if (!user) {
+      const error = new Error('User not found!');
+      error.status = 401;
+      return callback(error);
+    }
+    const data = {
+      username: user.username,
+      steamID64: user.steamID64,
+      apps: user.apps,
+      imageUrl: user.imageUrl
+    };
+    return callback(null, data);
+  })
 };
 
 const User = mongoose.model('User', UserSchema);

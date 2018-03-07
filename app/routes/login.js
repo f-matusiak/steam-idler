@@ -23,7 +23,7 @@ router.post('/', (req, res, next) => {
       res.render('login', { error: "User dont exist!" });
     } else {
       const payload = {
-        username: user.username
+        id: user._id
       }
       const token = jwt.sign(payload, 'superSecret', {
         expiresIn: 86400
