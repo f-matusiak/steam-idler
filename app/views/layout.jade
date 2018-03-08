@@ -3,9 +3,22 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css' type="text/css" media="all")
-    script(src="/javascripts/form.js")
+    script(src="/javascripts/layout.js")
     meta(name="viewport" content="width=device-width, initial-scale=1")
     meta(http-equiv="Content-Type" content="text/html; charset=utf-8")
     block head
   body
+    ul
+      li
+        a(href="/") Home
+      li
+        a(href="/profile") Profile
+      block navbar
+      span#login
+        li.float-rt
+          a(href="/login") Login
+        li.float-rt
+          a(href="/register") Register
+      li#logoff.float-rt
+        a(href="#") Log Out
     block content

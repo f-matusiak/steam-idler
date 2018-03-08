@@ -27,7 +27,8 @@ const UserSchema = new mongoose.Schema({
   },
   profileName: String,
   imageUrl: String,
-  apps: [{ appId: Number, name: String }]
+  profileUrl: String,
+  apps: [{ appId: Number, name: String, imageUrl: String, playtime: Number }]
 });
 
 UserSchema.pre('save', function (next) {

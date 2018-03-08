@@ -1,11 +1,25 @@
-var express = require('express');
-var router = express.Router();
-
+const express = require('express');
+const router = express.Router();
+const User = require('../models/user');
 
 /* GET home page. */
 router.get('/', function (req, res) {
 
-  res.render('index', { title: 'Express' });
+  const data = {
+    title: 'Steam Idler'
+  }
+
+  User.count({}, (err, count) => {
+    if (err) {
+      data.numberOfUsers = 'Error';
+      res.render('index', data);
+    } else {
+      data.numberOfUsers = count;
+      res.render('index', data);
+    }
+  })
+
+
 });
 
 module.exports = router;

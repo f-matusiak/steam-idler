@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
-
+const jwtSecret = require('../../config').jwtSecret;
 module.exports = {
   requiresLogin: (req, res, next) => {
     const token = req.body.token || req.cookies.token;
 
     if (token) {
-      jwt.verify(token, 'superSecret', (err, decoded) => {
+      jwt.verify(token, jwtSecret, (err, decoded) => {
         if (err) {
           return next(new Error('Failed to authenticate token!'));
         } else {
@@ -17,4 +17,5 @@ module.exports = {
       return next(new Error('You have to provide a token!'));
     }
   }
+
 };

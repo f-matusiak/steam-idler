@@ -4,6 +4,10 @@ block head
   script(src="/javascripts/jquery-3.3.1.min.js")
   script(src="/javascripts/profile.js")
 
+block navbar
+  li
+    a#update(href="#") Update Profile
+
 block content
   h1= text
   h2= token
@@ -15,6 +19,7 @@ block content
     .design-w3l
       .mail-form-agile
         form
-          input(type="text", name="steamID64")
+          input.padding(type="text", name="steamID64" placeholder="Enter your steamID64")
           br
-          input#submit(type="submit", value="Save")
+          input#submit(type="submit", value="Save profile")
+          

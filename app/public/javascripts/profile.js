@@ -8,5 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log(res);
     })
   })
-
+  document.getElementById('update').addEventListener('click', (e) => {
+    e.preventDefault();
+    $.post(`${window.location.pathname}/update`, {}, (res) => {
+      console.log(res);
+    })
+  })
 })
