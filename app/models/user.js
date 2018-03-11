@@ -21,10 +21,7 @@ const UserSchema = new mongoose.Schema({
   steamLogin: String,
   steamPassword: String,
   confirmation: Number,
-  steamID64: {
-    type: String,
-    unique: true
-  },
+  steamID64: String, //should be unique but need to set it to empty string at start!
   profileName: String,
   imageUrl: String,
   profileUrl: String,
@@ -33,11 +30,15 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.pre('save', function (next) {
   const user = this;
+
   bcrypt.hash(user.password, 10, (err, hash) => {
     if (err) return next(err);
-    user.password = hash;
+    if (user.steamID64 === "") {
+      user.password = hash;
+    }
     next();
   });
+
 });
 
 UserSchema.statics.authenticate = (email, password, callback) => {
@@ -51,10 +52,14 @@ UserSchema.statics.authenticate = (email, password, callback) => {
         return callback(error);
       }
       bcrypt.compare(password, user.password, (err, result) => {
+        console.log(result);
         if (result === true) {
+
           return callback(null, user);
         } else {
-          return callback();
+          const error = new Error('Wrong password');
+          error.status = 401;
+          return callback(error);
         }
       });
     });

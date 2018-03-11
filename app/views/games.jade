@@ -1,0 +1,24 @@
+extends layout
+
+block head
+  script(src="/javascripts/jquery-3.3.1.min.js")
+  script(src="/javascripts/games.js")
+
+block navbar
+  li
+    a#update(href="#") Update Game List
+
+block content
+  .padding-all
+    .header
+      h1
+        img(src="#{imageUrl}", alt="nie ma", srcset="")
+        | #{profileName}
+    .design-w3l
+      .mail-form-agile
+        - each game in apps
+          p
+            img(src="#{game.imageUrl}" id="#{game.appId}")
+            | #{game.name}
+
+      

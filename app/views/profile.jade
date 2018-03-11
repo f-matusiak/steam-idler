@@ -9,17 +9,15 @@ block navbar
     a#update(href="#") Update Profile
 
 block content
-  h1= text
-  h2= token
   .padding-all
     .header
-      h1 #{user} Profile
-      h2= password
-      h4= token
+      h1
+        img(src="#{imageUrl}", alt=" ")
+        | #{profileName}
     .design-w3l
       .mail-form-agile
         form
-          input.padding(type="text", name="steamID64" placeholder="Enter your steamID64")
+          input.padding(type="text", name="steamID64" placeholder="#{steamID64}")
           br
           input#submit(type="submit", value="Save profile")
           

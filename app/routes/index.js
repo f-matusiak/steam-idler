@@ -9,6 +9,8 @@ router.get('/', function (req, res) {
     title: 'Steam Idler'
   }
 
+  data.logged = req.cookies.token ? true : false;
+
   User.count({}, (err, count) => {
     if (err) {
       data.numberOfUsers = 'Error';

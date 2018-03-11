@@ -7,12 +7,18 @@ html
     meta(name="viewport" content="width=device-width, initial-scale=1")
     meta(http-equiv="Content-Type" content="text/html; charset=utf-8")
     block head
+    
   body
     ul
       li
         a(href="/") Home
-      li
-        a(href="/profile") Profile
+      if logged
+        li
+          a(href="/profile") Profile
+        li
+          a(href="/games") Games
+      
+      
       block navbar
       span#login
         li.float-rt

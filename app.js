@@ -31,8 +31,8 @@ app.use(express.static(path.join(__dirname, 'app/public')));
 
 const routes = require('./app/routes/index');
 const login = require('./app/routes/login');
-//const logout = require('./app/routes/logout');
 const register = require('./app/routes/register');
+
 
 app.use('/', routes);
 app.use('/login', login);
@@ -41,7 +41,9 @@ app.use('/register', register);
 // Routes after middleware authentication
 app.use(mid.requiresLogin);
 const profile = require('./app/routes/profile');
+const games = require('./app/routes/games');
 app.use('/profile', profile);
+app.use('/games', games);
 
 /// catch 404 and forwarding to error handler
 app.use(function (req, res, next) {
