@@ -40,8 +40,12 @@ app.use('/register', register);
 
 // Routes after middleware authentication
 app.use(mid.requiresLogin);
+
 const profile = require('./app/routes/profile');
 const games = require('./app/routes/games');
+const userConfig = require('./app/routes/userconfig');
+
+app.use('/config', userConfig);
 app.use('/profile', profile);
 app.use('/games', games);
 

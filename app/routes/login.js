@@ -32,7 +32,6 @@ router.post('/', (req, res, next) => {
         expiresIn: 86400
       });
       res.json({ token: token });
-
     }
 
   })

@@ -9,29 +9,30 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/:id', (req, res, next) => {
-  User.findOne({ _id: req.decoded.id }, (err, user) => {
-    if (err) return next(new Error('Error user can not be found'));
-    if (!user) {
-      return next(new Error('specified user dont exist!'));
-    } else if (req.decoded.id === req.params.id) {
-      const data = {
-        token: req.cookies.token,
-        logged: true
+  if (req.decoded.id === req.params.id) {
+    const params = [
+      'profileName',
+      'imageUrl',
+      'profileUrl',
+      'apps',
+      'steamID64'
+    ];
+
+    User.getParams(req.decoded.id, params, (err, data) => {
+      if (err) return next(err)
+      if (!data) {
+        return next(new Error('No data received from database'))
       }
 
-      if (user.profileName) data.profileName = user.profileName;
-      if (user.imageUrl) data.imageUrl = user.imageUrl;
-      if (user.profileUrl) data.profileUrl = user.profileUrl;
-      if (user.apps && user.apps.length > 0) data.apps = user.apps;
-      data.steamID64 = user.steamID64 ? user.steamID64 : 'Enter steamID64';
+      data.token = req.cookies.token;
+      data.logged = true;
 
       res.render('profile', data);
-    } else {
-      res.render('profile', { text: `it's not your profile xD` });
-    }
 
-  })
-
+    })
+  } else {
+    res.render('profile', { text: `it's not your profile xD` });
+  }
 });
 
 // Games page after passing id parameter in url in profile path!!!

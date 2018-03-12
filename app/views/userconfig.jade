@@ -1,0 +1,20 @@
+extends layout
+
+block head
+  script(src="/javascripts/userconfig.js")
+
+block navbar
+
+block content
+  .padding-all
+    .header
+      if profileName
+        h1= profileName
+      else
+        h1 Steam account credentials
+    .design-w3l
+      .mail-form-agile
+        form
+          input#username.padding(type="text", name="username", placeholder="#{steamLogin}" required="")
+          input#password.padding(type="password", name="password", placeholder="Password...", required="")
+          input#submit(type="submit", value="Save")
