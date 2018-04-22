@@ -14,7 +14,7 @@ module.exports = {
         }
       })
     } else {
-      return next(new Error('You have to provide a token!'));
+      return next(new Error('Please log in!'));
     }
   }
 
