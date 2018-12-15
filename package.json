@@ -6,7 +6,6 @@
     "start": "nodemon ./app/bin/www"
   },
   "dependencies": {
-    "bcrypt": "1.0.3",
     "body-parser": "1.0.2",
     "cookie-parser": "1.0.1",
     "debug": "0.7.4",

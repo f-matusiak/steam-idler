@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
   email: {
@@ -25,24 +24,18 @@ const UserSchema = new mongoose.Schema({
   profileName: String,
   imageUrl: String,
   profileUrl: String,
-  apps: [{ appId: Number, name: String, imageUrl: String, playtime: Number }]
-});
-
-UserSchema.pre('save', function (next) {
-  const user = this;
-
-  bcrypt.hash(user.password, 10, (err, hash) => {
-    if (err) return next(err);
-    if (user.steamID64 === "") {
-      user.password = hash;
-    }
-    next();
-  });
-
+  apps: [{
+    appId: Number,
+    name: String,
+    imageUrl: String,
+    playtime: Number
+  }]
 });
 
 UserSchema.statics.authenticate = (email, password, callback) => {
-  User.findOne({ email: email })
+  User.findOne({
+      email: email
+    })
     .exec((err, user) => {
       if (err) {
         return callback(err);
@@ -51,22 +44,22 @@ UserSchema.statics.authenticate = (email, password, callback) => {
         error.status = 401;
         return callback(error);
       }
-      bcrypt.compare(password, user.password, (err, result) => {
-        console.log(result);
-        if (result === true) {
 
-          return callback(null, user);
-        } else {
-          const error = new Error('Wrong password');
-          error.status = 401;
-          return callback(error);
-        }
-      });
+      if (password === user.password) {
+        return callback(null, user);
+      }
+
+      const error = new Error('Wrong password');
+      error.status = 401;
+      return callback(error);
+
     });
 };
 
 UserSchema.statics.updateSteamID = (id, steamID64, callback) => {
-  User.findByIdAndUpdate(id, { "steamID64": steamID64 }, (err, user) => {
+  User.findByIdAndUpdate(id, {
+    "steamID64": steamID64
+  }, (err, user) => {
     if (err) {
       return callback(err);
     } else if (!user) {
@@ -79,7 +72,10 @@ UserSchema.statics.updateSteamID = (id, steamID64, callback) => {
 };
 
 UserSchema.statics.updateSteamCredentials = (id, userData, callback) => {
-  User.findByIdAndUpdate(id, { steamLogin: userData.username, steamPassword: userData.password }, (err, user) => {
+  User.findByIdAndUpdate(id, {
+    steamLogin: userData.username,
+    steamPassword: userData.password
+  }, (err, user) => {
 
     if (err) {
       return callback(err);
