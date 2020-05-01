@@ -1,4 +1,4 @@
 module.exports = {
-  steamApiKey: "AF9C0673BC04C574E6C4CBC446B8D565",
-  jwtSecret: "superSecret"
-}
+  steamApiKey: "6B35378F724E29B7BC91AAF77D1A892A",
+  jwtSecret: "superSecret",
+};
