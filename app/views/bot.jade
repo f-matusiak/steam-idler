@@ -1,0 +1,27 @@
+extends layout
+
+block head
+  script(src="/javascripts/bot.js")
+
+block navbar
+
+block content
+  .padding-all
+    .header
+      h1 Steam bot managament
+    .design-w3l
+      .mail-form-agile
+        form#authlogin
+          input#auth.padding(type="text", name="auth", placeholder="auth code" required="")
+          input.submit(type="submit", value="Login")
+
+    .design-w3l
+      .mail-form-agile
+        form#startapp
+          input#appId.padding(type="text", name="appId", placeholder="appId" required="")
+          input.submit(type="submit", value="Start")
+
+    .design-w3l
+      .mail-form-agile
+        form#logout
+          input.submit(type="submit", value="Logout")

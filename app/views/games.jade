@@ -16,8 +16,11 @@ block content
     .design-w3l
       .mail-form-agile
         - each game in apps
-          p
+          p#game-li
             img(src="#{game.imageUrl}" id="#{game.appId}")
-            | #{game.name}
+            #right
+              span #{game.name}
+              span appId: #{game.appId}
+              span #{game.playtime} minutes played
 
       

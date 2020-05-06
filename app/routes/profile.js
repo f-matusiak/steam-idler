@@ -6,25 +6,22 @@ const request = require("request");
 
 router.get("/", (req, res, next) => {
   if (req.decoded.id) {
-    const params = [
-      "profileName",
-      "imageUrl",
-      "profileUrl",
-      "apps",
-      "steamID64",
-    ];
+    User.findOne({ where: { id: req.decoded.id } })
+      .then((user) => {
+        const data = {
+          profileName: user.profileName,
+          imageUrl: user.imageUrl,
+          profileUrl: user.profileUrl,
+          steamID64: user.steamID64,
+          token: req.cookies.token,
+          logged: true,
+        };
 
-    User.getParams(req.decoded.id, params, (err, data) => {
-      if (err) return next(err);
-      if (!data) {
-        return next(new Error("No data received from database"));
-      }
-
-      data.token = req.cookies.token;
-      data.logged = true;
-
-      res.render("profile", data);
-    });
+        res.render("profile", data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   } else {
     res.render("profile", { text: `it's not your profile xD` });
   }
@@ -35,14 +32,19 @@ router.get("/", (req, res, next) => {
 router.post("/setid", (req, res, next) => {
   if (req.body.steamID64) {
     if (req.decoded.id) {
-      User.updateSteamID(req.decoded.id, req.body.steamID64, (err, user) => {
-        if (err) return next(err);
-        if (!user) {
-          return next(new Error("user not found"));
-        }
-        res.json({ success: "SteamID64 changed" });
-      });
-      // UPDATE APPS and profile
+      User.findOne({ where: { id: req.decoded.id } })
+        .then((user) => {
+          if (!user) {
+            return next(new Error("user not found"));
+          }
+          user.update({
+            steamID64: req.body.steamID64,
+          });
+          res.json({ success: "SteamID64 changed" });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       res.json({ error: "Another user is using this steamID" });
     }
@@ -51,39 +53,37 @@ router.post("/setid", (req, res, next) => {
 
 router.post("/update", (req, res, next) => {
   if (req.decoded.id) {
-    User.findById(req.decoded.id, (err, user) => {
-      if (err) {
-        return next(err);
-      }
+    User.findOne({ where: { id: req.decoded.id } })
+      .then((user) => {
+        const steamID64 = user.steamID64;
+        request(
+          `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamApiKey}&steamids=${steamID64}`,
+          (error, response, body) => {
+            if (error) {
+              return next(error);
+            } else if (!body) {
+              return res.json({ error: "Error: couldnt fetch data" });
+            }
+            const data = JSON.parse(body);
+            if (
+              data.response &&
+              data.response.players &&
+              data.response.players.length >= 1
+            ) {
+              const d = data.response.players[0];
 
-      const steamID64 = user.steamID64;
-      request(
-        `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamApiKey}&steamids=${steamID64}`,
-        (error, response, body) => {
-          if (err) {
-            return next(err);
-          } else if (!body) {
-            return res.json({ error: "Error: couldnt fetch data" });
+              user.update({
+                profileName: d.personaname,
+                profileUrl: d.profileurl,
+                imageUrl: d.avatarfull,
+              });
+            }
           }
-          const data = JSON.parse(body);
-          if (
-            data.response &&
-            data.response.players &&
-            data.response.players.length >= 1
-          ) {
-            const d = data.response.players[0];
-            user.profileName = d.personaname;
-            user.profileUrl = d.profileurl;
-            user.imageUrl = d.avatarfull;
-
-            user.save((err) => {
-              if (err) return next(err);
-              res.json({ success: "Congrats!" });
-            });
-          }
-        }
-      );
-    });
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   } else {
     res.json({ error: "error while updating profile" });
   }
