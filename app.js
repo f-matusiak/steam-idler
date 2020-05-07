@@ -8,8 +8,6 @@ const jwt = require("jsonwebtoken");
 const Sequelize = require("sequelize");
 const sqlite3 = require("sqlite3");
 
-const db = new sqlite3.Database(__dirname + "steam.db");
-
 // Middlewares object
 const mid = require("./app/middlewares/middlewares");
 

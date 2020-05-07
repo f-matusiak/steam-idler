@@ -6,7 +6,26 @@ const SteamUser = require("steam-user");
 const clients = {};
 
 router.get("/", (req, res, next) => {
-  res.render("bot");
+  User.findOne({ where: { id: req.decoded.id } })
+    .then((user) => {
+      if (!user) {
+        const error = new Error("User not found!");
+        error.status = 401;
+        return next(error);
+      }
+
+      const client = clients[user.id];
+
+      const data = {
+        credentials: user.steamLogin && user.steamPassword,
+        client: !!client,
+      };
+
+      res.render("bot", data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 router.post("/start", (req, res, next) => {
@@ -44,6 +63,7 @@ router.post("/login", (req, res, next) => {
 
         client.setPersona(SteamUser.EPersonaState.Online);
         clients[req.decoded.id] = client;
+
         res.json({ success: "logged in successfully" });
       });
     })
